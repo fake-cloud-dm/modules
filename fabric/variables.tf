@@ -42,4 +42,13 @@ variable "fabric_workspace_name" {
   description = "Name of the Fabric workspace"
 }
 
+variable "fabric_workspaces" {
+  type = map(object({
+    display_name = string
+    description  = string
+  }))
+  description = "Map of Fabric workspaces to create"
+  default     = {}
+}
+
 # Add more variables as needed (e.g., for VNet configuration, Private Link)

@@ -37,9 +37,9 @@ resource "azurerm_fabric_capacity" "fabric_capacity" {
   }
 }
 
-resource "fabric_workspace" "example2" {
-  display_name = "example2"
-  description  = "Example Workspace 2"
+resource "fabric_workspace" "workspaces" {
+  for_each     = var.fabric_workspaces
+  display_name = "fabws-${each.key}-uks001"
   capacity_id  = azurerm_fabric_capacity.fabric_capacity.id
   identity = {
     type = "SystemAssigned"
@@ -47,3 +47,16 @@ resource "fabric_workspace" "example2" {
 }
 
 # Add resources for VNet, Private Link, etc., if needed
+
+# resource "fabric_workspace_git" "git_integration" {
+#   workspace_id            = "00000000-0000-0000-0000-000000000000"
+#   initialization_strategy = "PreferWorkspace"
+#   git_provider_details = {
+#     git_provider_type = "AzureDevOps"
+#     organization_name = "MyExampleOrg"
+#     project_name      = "MyExampleProject"
+#     repository_name   = "ExampleRepo"
+#     branch_name       = "ExampleBranch"
+#     directory_name    = "/ExampleDirectory"
+#   }
+# }
