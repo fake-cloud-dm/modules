@@ -1,4 +1,5 @@
 provider "fabric" {
+  source = "microsoft/fabric"
   # Configuration options for the Fabric provider, if needed
 }
 
