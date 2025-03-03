@@ -7,6 +7,10 @@ terraform {
   }
 }
 
+provider "fabric" {
+  preview = ["workspace_git_integration"]
+}
+
 resource "azurerm_resource_group" "rg" {
   count = var.existing_rg ? 0 : 1
 
