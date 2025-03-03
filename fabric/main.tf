@@ -46,53 +46,6 @@ resource "fabric_workspace" "workspaces" {
   }
 }
 
-Yes, that's a good idea. Separating the group creation into four blocks can make the code easier to read and manage, especially as we add more complexity.
-
-Here's the updated main.tf file with separate blocks for each role:
-
-Terraform
-
-resource "azurerm_resource_group" "rg" {
-  count = var.existing_rg ? 0 : 1
-
-  name     = var.resource_group_name
-  location = var.location
-}
-
-data "azurerm_resource_group" "rg" {
-  count = var.existing_rg ? 1 : 0
-
-  name = var.existing_rg_name
-}
-
-resource "azurerm_fabric_capacity" "fabric_capacity" {
-  name                = var.fabric_capacity_name
-  resource_group_name = var.existing_rg ? data.azurerm_resource_group.rg[0].name : azurerm_resource_group.rg[0].name
-  location            = var.location
-
-  administration_members = var.admin_users
-
-  sku {
-    name = var.sku_name
-    tier = "Fabric"
-  }
-
-  tags = {
-    environment = "test"
-  }
-}
-
-resource "fabric_workspace" "workspaces" {
-  for_each = var.fabric_workspaces
-
-  display_name = "fabws-${each.key}-uks001"
-  description  = each.value.description
-  capacity_id  = azurerm_fabric_capacity.fabric_capacity.id
-  identity {
-    type = "SystemAssigned"
-  }
-}
-
 resource "azuread_group" "admin_groups" {
   for_each = { for k, v in fabric_workspace.workspaces : k => v.display_name }
 
