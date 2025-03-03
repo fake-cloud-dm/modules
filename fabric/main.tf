@@ -48,6 +48,12 @@ resource "azurerm_fabric_capacity" "fabric_capacity" {
   tags = {
     environment = "test" # You can customize this tag if needed
   }
+
+  lifecycle {
+    ignore_changes = [
+      tags
+    ]
+  }
 }
 
 data "fabric_capacity" "capacity" {
