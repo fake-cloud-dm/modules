@@ -59,73 +59,73 @@ resource "fabric_workspace" "workspaces" {
   }
 }
 
-resource "azuread_group" "admin_groups" {
-  for_each = { for k, v in fabric_workspace.workspaces : k => v.display_name }
+# resource "azuread_group" "admin_groups" {
+#   for_each = { for k, v in fabric_workspace.workspaces : k => v.display_name }
 
-  display_name     = "${each.value}-admin"
-  mail_nickname    = "${each.value}-admin"
-  security_enabled = true
-}
+#   display_name     = "${each.value}-admin"
+#   mail_nickname    = "${each.value}-admin"
+#   security_enabled = true
+# }
 
-resource "azuread_group" "contributor_groups" {
-  for_each = { for k, v in fabric_workspace.workspaces : k => v.display_name }
+# resource "azuread_group" "contributor_groups" {
+#   for_each = { for k, v in fabric_workspace.workspaces : k => v.display_name }
 
-  display_name     = "${each.value}-contributor"
-  mail_nickname    = "${each.value}-contributor"
-  security_enabled = true
-}
+#   display_name     = "${each.value}-contributor"
+#   mail_nickname    = "${each.value}-contributor"
+#   security_enabled = true
+# }
 
-resource "azuread_group" "member_groups" {
-  for_each = { for k, v in fabric_workspace.workspaces : k => v.display_name }
+# resource "azuread_group" "member_groups" {
+#   for_each = { for k, v in fabric_workspace.workspaces : k => v.display_name }
 
-  display_name     = "${each.value}-member"
-  mail_nickname    = "${each.value}-member"
-  security_enabled = true
-}
+#   display_name     = "${each.value}-member"
+#   mail_nickname    = "${each.value}-member"
+#   security_enabled = true
+# }
 
-resource "azuread_group" "viewer_groups" {
-  for_each = { for k, v in fabric_workspace.workspaces : k => v.display_name }
+# resource "azuread_group" "viewer_groups" {
+#   for_each = { for k, v in fabric_workspace.workspaces : k => v.display_name }
 
-  display_name     = "${each.value}-viewer"
-  mail_nickname    = "${each.value}-viewer"
-  security_enabled = true
-}
+#   display_name     = "${each.value}-viewer"
+#   mail_nickname    = "${each.value}-viewer"
+#   security_enabled = true
+# }
 
-resource "fabric_workspace_role_assignment" "admin_role_assignments" {
-  for_each = { for k, v in fabric_workspace.workspaces : k => v }
+# resource "fabric_workspace_role_assignment" "admin_role_assignments" {
+#   for_each = { for k, v in fabric_workspace.workspaces : k => v }
 
-  workspace_id   = each.value.id
-  principal_id   = azuread_group.admin_groups[each.key].id
-  principal_type = "Group"
-  role           = "Admin"
-}
+#   workspace_id   = each.value.id
+#   principal_id   = azuread_group.admin_groups[each.key].id
+#   principal_type = "Group"
+#   role           = "Admin"
+# }
 
-resource "fabric_workspace_role_assignment" "contributor_role_assignments" {
-  for_each = { for k, v in fabric_workspace.workspaces : k => v }
+# resource "fabric_workspace_role_assignment" "contributor_role_assignments" {
+#   for_each = { for k, v in fabric_workspace.workspaces : k => v }
 
-  workspace_id   = each.value.id
-  principal_id   = azuread_group.contributor_groups[each.key].id
-  principal_type = "Group"
-  role           = "Contributor"
-}
+#   workspace_id   = each.value.id
+#   principal_id   = azuread_group.contributor_groups[each.key].id
+#   principal_type = "Group"
+#   role           = "Contributor"
+# }
 
-resource "fabric_workspace_role_assignment" "member_role_assignments" {
-  for_each = { for k, v in fabric_workspace.workspaces : k => v }
+# resource "fabric_workspace_role_assignment" "member_role_assignments" {
+#   for_each = { for k, v in fabric_workspace.workspaces : k => v }
 
-  workspace_id   = each.value.id
-  principal_id   = azuread_group.member_groups[each.key].id
-  principal_type = "Group"
-  role           = "Member"
-}
+#   workspace_id   = each.value.id
+#   principal_id   = azuread_group.member_groups[each.key].id
+#   principal_type = "Group"
+#   role           = "Member"
+# }
 
-resource "fabric_workspace_role_assignment" "viewer_role_assignments" {
-  for_each = { for k, v in fabric_workspace.workspaces : k => v }
+# resource "fabric_workspace_role_assignment" "viewer_role_assignments" {
+#   for_each = { for k, v in fabric_workspace.workspaces : k => v }
 
-  workspace_id   = each.value.id
-  principal_id   = azuread_group.viewer_groups[each.key].id
-  principal_type = "Group"
-  role           = "Viewer"
-}
+#   workspace_id   = each.value.id
+#   principal_id   = azuread_group.viewer_groups[each.key].id
+#   principal_type = "Group"
+#   role           = "Viewer"
+# }
 
 # Add resources for VNet, Private Link, etc., if needed
 
