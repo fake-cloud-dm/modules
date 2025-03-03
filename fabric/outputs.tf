@@ -3,9 +3,9 @@ output "fabric_capacity_id" {
   description = "ID of the Fabric capacity"
 }
 
-output "fabric_workspace_id" {
-  value       = fabric_workspace.example2.id
-  description = "ID of the Fabric workspace"
+output "fabric_workspace_ids" {
+  value       = { for workspace in values(fabric_workspace.workspaces) : workspace.name => workspace.id }
+  description = "IDs of the Fabric workspaces"
 }
 
 # Add other outputs as needed
