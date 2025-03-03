@@ -14,6 +14,12 @@ resource "azurerm_resource_group" "rg" {
   location = var.location
 }
 
+data "azurerm_resource_group" "rg" {
+  count = var.existing_rg ? 1 : 0
+
+  name = var.existing_rg_name
+}
+
 resource "azurerm_fabric_capacity" "fabric_capacity" {
   name                = var.fabric_capacity_name
   resource_group_name = var.existing_rg ? data.azurerm_resource_group.rg[0].name : azurerm_resource_group.rg[0].name
