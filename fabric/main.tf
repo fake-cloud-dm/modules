@@ -52,7 +52,7 @@ resource "azuread_group" "workspace_groups" {
     workspace_key => {
       for role in ["admin", "contributor", "member", "viewer"] :
       role => {
-        display_name = "${workspace.display_name}-${role}"
+        display_name = "${var.fabric_workspaces[workspace_key].display_name}-${role}"
       }
     }
   }
@@ -61,6 +61,35 @@ resource "azuread_group" "workspace_groups" {
   mail_nickname    = each.value.display_name
   security_enabled = true
 }
+
+# resource "fabric_workspace_role_assignment" "role_assignments" {
+#   for_each = {
+#     for workspace_key, workspace in var.fabric_workspaces :
+#     workspace_key => {
+#       admin_id        = var.principal_ids[workspace_key].admin_id
+#       contributor_id = var.principal_ids[workspace_key].contributor_id
+#       member_id       = var.principal_ids[workspace_key].member_id
+#       viewer_id       = var.principal_ids[workspace_key].viewer_id
+#     }
+#   }
+
+#   depends_on = [azuread_group.workspace_groups]
+
+#   dynamic "role_assignment" {
+#     for_each = {
+#       Admin        = each.value.admin_id,
+#       Contributor = each.value.contributor_id,
+#       Member       = each.value.member_id,
+#       Viewer       = each.value.viewer_id
+#     }
+#     content {
+#       workspace_id  = fabric_workspace.workspaces[each.key].id
+#       principal_id  = role_assignment.value
+#       principal_type = "Group"
+#       role           = role_assignment.key
+#     }
+#   }
+# }
 
 # Add resources for VNet, Private Link, etc., if needed
 
