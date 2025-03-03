@@ -167,7 +167,7 @@ resource "null_resource" "create_folders" {
     command = <<EOT
       git clone https://${var.azuredevops_pat}@dev.azure.com/${var.azuredevops_org}/${azuredevops_project.projects[each.key].name}/_git/${azuredevops_git_repository.repositories[each.key].name}
       cd ${azuredevops_git_repository.repositories[each.key].name}
-      mkdir -p Fabric
+      mkdir -p /Fabric
       git add .
       git commit -m "Create folders"
       git push
@@ -186,7 +186,7 @@ resource "fabric_workspace_git" "git_integration" {
     project_name      = "Fabric-${each.key}" # Dynamic project name
     repository_name   = "fabric-workspace-${each.key}"
     branch_name       = "main"
-    directory_name    = "/Fabric"
+    directory_name    = "/"
   }
   depends_on = [azuredevops_project.projects, azuredevops_git_repository.repositories]
 }
