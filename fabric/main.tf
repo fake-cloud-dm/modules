@@ -72,6 +72,27 @@ resource "fabric_workspace" "workspaces" {
   depends_on = [azurerm_fabric_capacity.fabric_capacity]
 }
 
+resource "fabric_lakehouse" "bronze_lakehouses" {
+  for_each = { for k, v in fabric_workspace.workspaces : k => v }
+
+  display_name = "fabwslh-${each.key}-bronze"
+  workspace_id = each.value.id
+}
+
+resource "fabric_lakehouse" "silver_lakehouses" {
+  for_each = { for k, v in fabric_workspace.workspaces : k => v }
+
+  display_name = "fabwslh-${each.key}-silver"
+  workspace_id = each.value.id
+}
+
+resource "fabric_warehouse" "golden_warehouses" {
+  for_each = { for k, v in fabric_workspace.workspaces : k => v }
+
+  display_name = "fabwswh-${each.key}-golden"
+  workspace_id = each.value.id
+}
+
 # resource "azuread_group" "admin_groups" {
 #   for_each = { for k, v in fabric_workspace.workspaces : k => v.display_name }
 
