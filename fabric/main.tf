@@ -163,7 +163,7 @@ resource "fabric_workspace_git" "git_integration" {
     git_provider_type = "AzureDevOps"
     organization_name = "dm-ansone-ado"
     project_name      = "Fabric-${each.key}" # Dynamic project name
-    repository_name   = "Fabric-${each.key}"
+    repository_name   = "fabric-workspace-${each.key}"
     branch_name       = "main"
     directory_name    = "/Fabric"
   }
