@@ -143,15 +143,15 @@ resource "azuredevops_project" "projects" {
   work_item_template = "Agile"
 }
 
-resource "azuredevops_git_repository" "repositories" {
-  for_each = { for k, v in fabric_workspace.workspaces : k => v.display_name }
+# resource "azuredevops_git_repository" "repositories" {
+#   for_each = { for k, v in fabric_workspace.workspaces : k => v.display_name }
 
-  project_id = azuredevops_project.projects[each.key].id
-  name       = "Fabric-${each.key}"
-  initialization {
-    init_type = "Clean"
-  }
-}
+#   project_id = azuredevops_project.projects[each.key].id
+#   name       = "Fabric-${each.key}"
+#   initialization {
+#     init_type = "Clean"
+#   }
+# }
 
 resource "fabric_workspace_git" "git_integration" {
   for_each = { for k, v in fabric_workspace.workspaces : k => v }
@@ -162,9 +162,9 @@ resource "fabric_workspace_git" "git_integration" {
     git_provider_type = "AzureDevOps"
     organization_name = "dm-ansone-ado"
     project_name      = "Fabric-${each.key}" # Dynamic project name
-    repository_name   = "Fabric"
+    repository_name   = "Fabric-${each.key}"
     branch_name       = "main"
     directory_name    = "/Fabric"
   }
-  depends_on = [azuredevops_project.projects, azuredevops_git_repository.repositories]
+  depends_on = [azuredevops_project.projects]
 }
