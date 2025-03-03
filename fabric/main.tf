@@ -46,19 +46,82 @@ resource "fabric_workspace" "workspaces" {
   }
 }
 
-resource "azuread_group" "workspace_groups" {
-  for_each = {
-    for workspace_key, workspace in fabric_workspace.workspaces :
-    workspace_key => {
-      for role in ["admin", "contributor", "member", "viewer"] :
-      role => {
-        display_name = "${workspace.display_name}-${role}"
-      }
-    }
+Yes, that's a good idea. Separating the group creation into four blocks can make the code easier to read and manage, especially as we add more complexity.
+
+Here's the updated main.tf file with separate blocks for each role:
+
+Terraform
+
+resource "azurerm_resource_group" "rg" {
+  count = var.existing_rg ? 0 : 1
+
+  name     = var.resource_group_name
+  location = var.location
+}
+
+data "azurerm_resource_group" "rg" {
+  count = var.existing_rg ? 1 : 0
+
+  name = var.existing_rg_name
+}
+
+resource "azurerm_fabric_capacity" "fabric_capacity" {
+  name                = var.fabric_capacity_name
+  resource_group_name = var.existing_rg ? data.azurerm_resource_group.rg[0].name : azurerm_resource_group.rg[0].name
+  location            = var.location
+
+  administration_members = var.admin_users
+
+  sku {
+    name = var.sku_name
+    tier = "Fabric"
   }
 
-  display_name     = each.value[each.key].display_name # Access display_name correctly
-  mail_nickname    = each.value[each.key].display_name
+  tags = {
+    environment = "test"
+  }
+}
+
+resource "fabric_workspace" "workspaces" {
+  for_each = var.fabric_workspaces
+
+  display_name = "fabws-${each.key}-uks001"
+  description  = each.value.description
+  capacity_id  = azurerm_fabric_capacity.fabric_capacity.id
+  identity {
+    type = "SystemAssigned"
+  }
+}
+
+resource "azuread_group" "admin_groups" {
+  for_each = { for k, v in fabric_workspace.workspaces : k => v.display_name }
+
+  display_name     = "${each.value}-admin"
+  mail_nickname    = "${each.value}-admin"
+  security_enabled = true
+}
+
+resource "azuread_group" "contributor_groups" {
+  for_each = { for k, v in fabric_workspace.workspaces : k => v.display_name }
+
+  display_name     = "${each.value}-contributor"
+  mail_nickname    = "${each.value}-contributor"
+  security_enabled = true
+}
+
+resource "azuread_group" "member_groups" {
+  for_each = { for k, v in fabric_workspace.workspaces : k => v.display_name }
+
+  display_name     = "${each.value}-member"
+  mail_nickname    = "${each.value}-member"
+  security_enabled = true
+}
+
+resource "azuread_group" "viewer_groups" {
+  for_each = { for k, v in fabric_workspace.workspaces : k => v.display_name }
+
+  display_name     = "${each.value}-viewer"
+  mail_nickname    = "${each.value}-viewer"
   security_enabled = true
 }
 
