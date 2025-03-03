@@ -48,11 +48,11 @@ resource "fabric_workspace" "workspaces" {
 
 resource "azuread_group" "workspace_groups" {
   for_each = {
-    for workspace_key, workspace in var.fabric_workspaces :
+    for workspace_key, workspace in fabric_workspace.workspaces :
     workspace_key => {
       for role in ["admin", "contributor", "member", "viewer"] :
       role => {
-        display_name = "${var.fabric_workspaces[workspace_key].display_name}-${role}"
+        display_name = "${workspace.display_name}-${role}"
       }
     }
   }
