@@ -46,6 +46,22 @@ resource "fabric_workspace" "workspaces" {
   }
 }
 
+resource "azuread_group" "workspace_groups" {
+  for_each = {
+    for workspace_key, workspace in var.fabric_workspaces :
+    workspace_key => {
+      for role in ["admin", "contributor", "member", "viewer"] :
+      role => {
+        display_name = "${workspace.display_name}-${role}"
+      }
+    }
+  }
+
+  display_name     = each.value.display_name
+  mail_nickname    = each.value.display_name
+  security_enabled = true
+}
+
 # Add resources for VNet, Private Link, etc., if needed
 
 # resource "fabric_workspace_git" "git_integration" {
