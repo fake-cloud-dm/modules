@@ -44,4 +44,15 @@ variable "fabric_workspaces" {
   default     = {}
 }
 
+variable "azuredevops_url" {
+  type        = string
+  description = "Azure DevOps organization URL"
+}
+
+variable "azuredevops_pat" {
+  type        = string
+  description = "Azure DevOps Personal Access Token"
+  sensitive   = true
+}
+
 # Add more variables as needed (e.g., for VNet configuration, Private Link)
