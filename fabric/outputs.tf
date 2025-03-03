@@ -4,7 +4,7 @@ output "fabric_capacity_id" {
 }
 
 output "fabric_workspace_ids" {
-  value       = { for workspace in values(fabric_workspace.workspaces) : workspace.name => workspace.id }
+  value       = { for key, workspace in fabric_workspace.workspaces : key => workspace.id }
   description = "IDs of the Fabric workspaces"
 }
 
