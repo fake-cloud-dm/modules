@@ -44,9 +44,9 @@ variable "fabric_workspaces" {
   default     = {}
 }
 
-variable "azuredevops_url" {
+variable "azuredevops_org" {
   type        = string
-  description = "Azure DevOps organization URL"
+  description = "Azure DevOps organization"
 }
 
 variable "azuredevops_pat" {
