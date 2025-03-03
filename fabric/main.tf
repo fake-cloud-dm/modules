@@ -5,16 +5,19 @@ terraform {
       version = "~> 0.1.0-beta.10"
     }
     azuredevops = {
-      source                = "hashicorp/azuredevops"
-      version               = "~> 0.4.0" # Or your desired version
-      org_service_url       = var.azuredevops_url
-      personal_access_token = var.azuredevops_pat
+      source  = "microsoft/azuredevops"
+      version = "1.7.0"
     }
   }
 }
 
 provider "fabric" {
   preview = true
+}
+
+provider "azuredevops" {
+  org_service_url       = var.azuredevops_url
+  personal_access_token = var.azuredevops_pat
 }
 
 resource "azurerm_resource_group" "rg" {
