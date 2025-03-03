@@ -4,6 +4,10 @@ terraform {
       source  = "microsoft/fabric"
       version = "~> 0.1.0-beta.10"
     }
+    azuredevops = {
+      source  = "hashicorp/azuredevops"
+      version = "~> 0.4.0" # Or your desired version
+    }
   }
 }
 
@@ -120,6 +124,25 @@ resource "fabric_workspace_role_assignment" "viewer_role_assignments" {
 
 # Add resources for VNet, Private Link, etc., if needed
 
+resource "azuredevops_project" "projects" {
+  for_each = { for k, v in fabric_workspace.workspaces : k => v.display_name }
+
+  name               = "Fabric-${each.key}"
+  description        = "Fabric project for ${each.value}"
+  version_control    = "Git"
+  work_item_template = "Agile"
+}
+
+resource "azuredevops_git_repository" "repositories" {
+  for_each = { for k, v in fabric_workspace.workspaces : k => v.display_name }
+
+  project_id = azuredevops_project.projects[each.key].id
+  name       = "Fabric-${each.key}"
+  initialization {
+    init_type = "Clean"
+  }
+}
+
 resource "fabric_workspace_git" "git_integration" {
   for_each = { for k, v in fabric_workspace.workspaces : k => v }
 
@@ -133,4 +156,5 @@ resource "fabric_workspace_git" "git_integration" {
     branch_name       = "main"
     directory_name    = "/Fabric"
   }
+  depends_on = [azuredevops_project.projects[each.key], azuredevops_git_repository.repositories[each.key]]
 }
