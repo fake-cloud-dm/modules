@@ -1,7 +1,11 @@
-# provider "fabric" {
-#   source = "microsoft/fabric"
-#   # Configuration options for the Fabric provider, if needed
-# }
+terraform {
+  required_providers {
+    fabric = {
+      source  = "microsoft/fabric"
+      version = "~> 0.1.0-beta.10"
+    }
+  }
+}
 
 resource "azurerm_fabric_capacity" "fabric_capacity" {
   name                = var.fabric_capacity_name
