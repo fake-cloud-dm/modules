@@ -7,6 +7,13 @@ terraform {
   }
 }
 
+resource "azurerm_resource_group" "rg" {
+  count = var.existing_rg ? 0 : 1
+
+  name     = var.resource_group_name
+  location = var.location
+}
+
 resource "azurerm_fabric_capacity" "fabric_capacity" {
   name                = var.fabric_capacity_name
   resource_group_name = var.existing_rg ? data.azurerm_resource_group.rg[0].name : azurerm_resource_group.rg[0].name
