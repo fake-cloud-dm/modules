@@ -116,15 +116,17 @@ resource "fabric_workspace_role_assignment" "viewer_role_assignments" {
 
 # Add resources for VNet, Private Link, etc., if needed
 
-# resource "fabric_workspace_git" "git_integration" {
-#   workspace_id            = "00000000-0000-0000-0000-000000000000"
-#   initialization_strategy = "PreferWorkspace"
-#   git_provider_details = {
-#     git_provider_type = "AzureDevOps"
-#     organization_name = "MyExampleOrg"
-#     project_name      = "MyExampleProject"
-#     repository_name   = "ExampleRepo"
-#     branch_name       = "ExampleBranch"
-#     directory_name    = "/ExampleDirectory"
-#   }
-# }
+resource "fabric_workspace_git" "git_integration" {
+  for_each = { for k, v in fabric_workspace.workspaces : k => v }
+
+  workspace_id            = each.value.id
+  initialization_strategy = "PreferWorkspace"
+  git_provider_details = {
+    git_provider_type = "AzureDevOps"
+    organization_name = "dm-ans-ado"
+    project_name      = "Fabric-${each.key}" # Dynamic project name
+    repository_name   = "Fabric"
+    branch_name       = "main"
+    directory_name    = "/Fabric"
+  }
+}
