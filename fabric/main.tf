@@ -53,7 +53,7 @@ resource "azurerm_fabric_capacity" "fabric_capacity" {
 resource "fabric_workspace" "workspaces" {
   for_each     = var.fabric_workspaces
   display_name = "fabws-${each.key}-uks001"
-  capacity_id  = replace(azurerm_fabric_capacity.fabric_capacity.id, "/subscriptions/.*/resourceGroups/.*/providers/Microsoft.Fabric/capacities/", "")
+  capacity_id  = trimsuffix(azurerm_fabric_capacity.fabric_capacity.id, "/capacities/${azurerm_fabric_capacity.fabric_capacity.name}")
   identity = {
     type = "SystemAssigned"
   }
