@@ -37,11 +37,6 @@ variable "admin_users" {
   description = "List of Fabric admin users' email addresses"
 }
 
-variable "fabric_workspace_name" {
-  type        = string
-  description = "Name of the Fabric workspace"
-}
-
 variable "fabric_workspaces" {
   type = map(object({
     display_name = string
