@@ -57,8 +57,8 @@ resource "azuread_group" "workspace_groups" {
     }
   }
 
-  display_name     = each.value.display_name
-  mail_nickname    = each.value.display_name
+  display_name     = each.value[each.key].display_name # Access display_name correctly
+  mail_nickname    = each.value[each.key].display_name
   security_enabled = true
 }
 
