@@ -58,6 +58,8 @@ resource "azurerm_fabric_capacity" "fabric_capacity" {
 
 data "fabric_capacity" "capacity" {
   display_name = var.fabric_capacity_name
+
+  depends_on = [azurerm_fabric_capacity.fabric_capacity]
 }
 
 resource "fabric_workspace" "workspaces" {
