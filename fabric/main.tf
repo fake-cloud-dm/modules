@@ -16,7 +16,7 @@ provider "fabric" {
 }
 
 provider "azuredevops" {
-  org_service_url       = var.azuredevops_url
+  org_service_url       = "https://dev.azure.com/${var.azuredevops_org}"
   personal_access_token = var.azuredevops_pat
 }
 
@@ -165,7 +165,7 @@ resource "null_resource" "create_folders" {
 
   provisioner "local-exec" {
     command = <<EOT
-      git clone https://${var.azuredevops_pat}@${trimsuffix(var.azuredevops_url, "https://")}/${azuredevops_project.projects[each.key].name}/_git/${azuredevops_git_repository.repositories[each.key].name}
+      git clone https://${var.azuredevops_pat}@dev.azure.com/${var.azuredevops_org}/${azuredevops_project.projects[each.key].name}/_git/${azuredevops_git_repository.repositories[each.key].name}
       cd ${azuredevops_git_repository.repositories[each.key].name}
       mkdir -p Fabric
       git add .
