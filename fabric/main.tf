@@ -148,7 +148,7 @@ resource "azuredevops_git_repository" "repositories" {
 
   project_id     = azuredevops_project.projects[each.key].id
   name           = "fabric-workspace-${each.key}"
-  default_branch = "main"
+  default_branch = "refs/heads/main"
   initialization {
     init_type = "Clean"
   }
