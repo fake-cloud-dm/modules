@@ -171,7 +171,7 @@ resource "fabric_workspace_git" "git_integration" {
     project_name      = "Fabric-${each.key}" # Dynamic project name
     repository_name   = "fabric-workspace-${each.key}"
     branch_name       = "main"
-    directory_name    = "Fabric"
+    directory_name    = "/Fabric"
   }
   depends_on = [azuredevops_project.projects, azuredevops_git_repository.repositories]
 }
