@@ -39,8 +39,6 @@ variable "admin_users" {
 
 variable "fabric_workspaces" {
   type = map(object({
-    display_name = string
-    description  = string
   }))
   description = "Map of Fabric workspaces to create"
   default     = {}
