@@ -1,3 +1,15 @@
+variable "existing_rg" {
+  type        = bool
+  description = "Whether to use an existing resource group"
+  default     = false
+}
+
+variable "existing_rg_name" {
+  type        = string
+  description = "Name of the existing resource group (if existing_rg is true)"
+  default     = ""
+}
+
 variable "resource_group_name" {
   type        = string
   description = "Name of the resource group"

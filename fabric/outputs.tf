@@ -4,7 +4,7 @@ output "fabric_capacity_id" {
 }
 
 output "fabric_workspace_id" {
-  value       = azurerm_powerbi_workspace.fabric_workspace.id
+  value       = fabric_workspace.example2.id
   description = "ID of the Fabric workspace"
 }
 
