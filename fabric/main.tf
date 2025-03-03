@@ -53,7 +53,7 @@ resource "azurerm_fabric_capacity" "fabric_capacity" {
 resource "fabric_workspace" "workspaces" {
   for_each     = var.fabric_workspaces
   display_name = "fabws-${each.key}-uks001"
-  capacity_id  = split("/", azurerm_fabric_capacity.fabric_capacity.id)[8]
+  capacity_id  = element(split("/", azurerm_fabric_capacity.fabric_capacity.id), 8)
   identity = {
     type = "SystemAssigned"
   }
