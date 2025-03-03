@@ -61,6 +61,7 @@ resource "fabric_workspace" "workspaces" {
   identity = {
     type = "SystemAssigned"
   }
+  depends_on = [azurerm_fabric_capacity.fabric_capacity]
 }
 
 # resource "azuread_group" "admin_groups" {
