@@ -160,6 +160,46 @@ resource "azuredevops_git_repository" "repositories" {
   }
 }
 
+resource "null_resource" "create_folders" {
+  for_each = { for k, v in fabric_workspace.workspaces : k => v.display_name }
+
+  provisioner "http" {
+    url    = "${var.azuredevops_url}/${var.azuredevops_org}/${azuredevops_project.projects[each.key].name}/_apis/git/repositories/${azuredevops_git_repository.repositories[each.key].name}/pushes?api-version=7.0"
+    method = "POST"
+    headers = {
+      Authorization  = "Basic ${base64encode("PAT:${var.azuredevops_pat}")}"
+      "Content-Type" = "application/json"
+    }
+    body = <<EOT
+    {
+      "refUpdates": [
+        {
+          "name": "refs/heads/main",
+          "oldObjectId": "0000000000000000000000000000000000000000"
+        }
+      ],
+      "commits": [
+        {
+          "comment": "Create folders",
+          "changes": [
+            {
+              "changeType": "add",
+              "item": {
+                "path": "/Fabric"
+              },
+              "newContent": {
+                "content": "",
+                "contentType": "rawtext"
+              }
+            }
+          ]
+        }
+      ]
+    }
+    EOT
+  }
+}
+
 resource "fabric_workspace_git" "git_integration" {
   for_each = { for k, v in fabric_workspace.workspaces : k => v }
 
