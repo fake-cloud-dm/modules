@@ -1,7 +1,7 @@
-provider "fabric" {
-  source = "microsoft/fabric"
-  # Configuration options for the Fabric provider, if needed
-}
+# provider "fabric" {
+#   source = "microsoft/fabric"
+#   # Configuration options for the Fabric provider, if needed
+# }
 
 resource "azurerm_fabric_capacity" "fabric_capacity" {
   name                = var.fabric_capacity_name
