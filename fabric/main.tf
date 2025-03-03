@@ -175,5 +175,5 @@ resource "fabric_workspace_git" "git_integration" {
     branch_name       = "main"
     directory_name    = "/"
   }
-  depends_on = [azuredevops_project.projects, azuredevops_git_repository.repositories]
+  depends_on = [fabric_workspace.workspaces, azuredevops_project.projects, azuredevops_git_repository.repositories]
 }
