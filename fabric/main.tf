@@ -8,7 +8,7 @@ terraform {
 }
 
 provider "fabric" {
-  preview = ["workspace_git_integration"]
+  preview = true
 }
 
 resource "azurerm_resource_group" "rg" {
