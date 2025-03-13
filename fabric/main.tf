@@ -43,7 +43,7 @@ resource "azurerm_fabric_capacity" "fabric_capacity" {
   resource_group_name = var.existing_rg ? data.azurerm_resource_group.rg[0].name : azurerm_resource_group.rg[0].name
   location            = var.location
 
-  administration_members = var.admin_users
+  administration_members = var.fabric_administrators
 
   sku {
     name = var.sku_name

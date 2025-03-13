@@ -32,7 +32,7 @@ variable "sku_name" {
   default     = "F8"
 }
 
-variable "admin_users" {
+variable "fabric_administrators" {
   type        = list(string)
   description = "List of Fabric admin users' email addresses"
 }
