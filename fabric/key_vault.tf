@@ -30,7 +30,7 @@ resource "azurerm_key_vault_access_policy" "workspace_kv_access" {
   secret_permissions = [
     "Get",
     "List",
-    "Update",
+    "Set",
   ]
 
   certificate_permissions = [
