@@ -92,3 +92,18 @@ variable "vnet_address_space" {
   type        = list(string)
   description = "Address space for the virtual network"
 }
+
+variable "hub_subscription_id" {
+  type        = string
+  description = "Subscription ID of the hub network"
+}
+
+variable "hub_rg_name" {
+  type        = string
+  description = "Name of the hub resource group"
+}
+
+variable "hub_vnet_name" {
+  type        = string
+  description = "Name of the hub network"
+}
