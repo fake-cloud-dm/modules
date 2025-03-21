@@ -20,7 +20,7 @@ resource "azurerm_subnet" "gateway_subnet" {
   address_prefixes     = var.gw_subnet_prefixes
 
   delegation {
-    name = "Microsoft.PowerPlatformDelegation"
+    name = "Microsoft.PowerPlatform/vnetaccesslinks"
     service_delegation {
       name = "Microsoft.PowerPlatform/vnetaccesslinks"
       actions = [
