@@ -22,7 +22,7 @@ resource "azurerm_subnet" "gateway_subnet" {
   delegation {
     name = "Microsoft.PowerPlatformDelegation"
     service_delegation {
-      name = "Microsoft.PowerPlatform/vnetaccesslinks"
+      name = "Microsoft.ServiceFabricMesh/networks"
       actions = [
         "Microsoft.Network/virtualNetworks/subnets/join/action",
       ]
