@@ -1,3 +1,8 @@
+variable "subscription_id" {
+  type        = string
+  description = "Azure subscription ID"
+}
+
 variable "existing_rg" {
   type        = bool
   description = "Whether to use an existing resource group"

@@ -26,7 +26,7 @@ resource "fabric_gateway" "fabric_vnet_gateway" {
     resource_group_name  = var.existing_rg ? data.azurerm_resource_group.rg[0].name : azurerm_resource_group.rg[0].name
     virtual_network_name = azurerm_virtual_network.fabric_vnet.name
     subnet_name          = azurerm_subnet.gateway_subnet.name
-    subscription_id      = data.azurerm_subscription.current.id
+    subscription_id      = var.subscription_id
   }
   capacity_id = data.fabric_capacity.capacity.id
 
