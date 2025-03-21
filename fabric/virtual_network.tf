@@ -14,6 +14,8 @@ resource "azurerm_subnet" "gateway_subnet" {
   address_prefixes     = var.gw_subnet_prefixes
 }
 
+data "azurerm_subscription" "current" {}
+
 # Fabric Virtual Network Gateway
 resource "fabric_gateway" "fabric_vnet_gateway" {
   type                            = "VirtualNetwork"
