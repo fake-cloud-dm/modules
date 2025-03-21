@@ -2,7 +2,7 @@ terraform {
   required_providers {
     fabric = {
       source  = "microsoft/fabric"
-      version = "0.1.0-rc.1"
+      version = "0.1.0-rc.2"
     }
     azuredevops = {
       source  = "microsoft/azuredevops"
