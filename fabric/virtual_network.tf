@@ -12,9 +12,17 @@ resource "azurerm_subnet" "gateway_subnet" {
   resource_group_name  = var.existing_rg ? data.azurerm_resource_group.rg[0].name : azurerm_resource_group.rg[0].name
   virtual_network_name = azurerm_virtual_network.fabric_vnet.name
   address_prefixes     = var.gw_subnet_prefixes
-}
 
-data "azurerm_subscription" "current" {}
+  delegation {
+    name = "Microsoft.PowerPlatformDelegation"
+    service_delegation {
+      name = "Microsoft.PowerPlatform/vnetaccesslinks"
+      actions = [
+        "Microsoft.Network/virtualNetworks/subnets/join/action",
+      ]
+    }
+  }
+}
 
 # Fabric Virtual Network Gateway
 resource "fabric_gateway" "fabric_vnet_gateway" {
