@@ -25,7 +25,7 @@ resource "azurerm_key_vault_access_policy" "workspace_kv_access" {
   for_each     = fabric_workspace.workspaces
   key_vault_id = azurerm_key_vault.workspace_keyvault[each.key].id
   tenant_id    = data.azurerm_client_config.current.tenant_id
-  object_id    = fabric_workspace.workspaces[each.key].identity != null ? fabric_workspace.workspaces[each.key].identity.principal_id : null
+  object_id    = output.workspace_principal_ids[each.key]
 
   secret_permissions = [
     "Get",

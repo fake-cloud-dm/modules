@@ -79,6 +79,12 @@ resource "fabric_workspace" "workspaces" {
   depends_on = [azurerm_fabric_capacity.fabric_capacity]
 }
 
+output "workspace_principal_ids" {
+  value = {
+    for key, workspace in fabric_workspace.workspaces : key => workspace.identity != null ? workspace.identity.principal_id : null
+  }
+}
+
 resource "fabric_lakehouse" "bronze_lakehouses" {
   for_each = { for k, v in fabric_workspace.workspaces : k => v }
 
