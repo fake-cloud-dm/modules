@@ -107,3 +107,8 @@ variable "hub_vnet_name" {
   type        = string
   description = "Name of the hub network"
 }
+
+variable "hub_fw_ip" {
+  type        = string
+  description = "IP address of the hub firewall"
+}

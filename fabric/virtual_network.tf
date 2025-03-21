@@ -58,6 +58,35 @@ data "azurerm_virtual_network" "hub_vnet" {
   resource_group_name = var.hub_vnet_rg
 }
 
+#Route Table to Hub Firewall
+resource "azurerm_route_table" "route_table_fabric" {
+  name                = lower("rt-${azurerm_subnet.gateway_subnet.name}")
+  location            = var.location
+  resource_group_name = var.existing_rg ? data.azurerm_resource_group.rg[0].name : azurerm_resource_group.rg[0].name
+
+  lifecycle {
+    ignore_changes = [
+      tags
+    ]
+  }
+}
+
+resource "azurerm_route" "rt_fabric_route" {
+  name                = "Default"
+  resource_group_name = var.existing_rg ? data.azurerm_resource_group.rg[0].name : azurerm_resource_group.rg[0].name
+  route_table_name    = azurerm_route_table.route_table_fabric.name
+
+  address_prefix         = "0.0.0.0/0"
+  next_hop_type          = "VirtualAppliance"
+  next_hop_in_ip_address = var.hub_fw_ip
+}
+
+resource "azurerm_subnet_route_table_association" "rt_association_connectivity" {
+  subnet_id      = azurerm_subnet.gateway_subnet.id
+  route_table_id = azurerm_route_table.route_table_fabric.id
+}
+
+
 # Fabric Virtual Network Gateway
 resource "fabric_gateway" "fabric_vnet_gateway" {
   type                            = "VirtualNetwork"
