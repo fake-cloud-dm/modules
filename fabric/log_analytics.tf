@@ -7,6 +7,12 @@ resource "azurerm_log_analytics_workspace" "workspace_loganalytics" {
   retention_in_days   = var.log_analytics_retention
 
   depends_on = [azurerm_resource_group.support_rg]
+
+  lifecycle {
+    ignore_changes = [
+      tags
+    ]
+  }
 }
 
 # resource "azurerm_monitor_diagnostic_setting" "workspace_diagnostic_setting" {

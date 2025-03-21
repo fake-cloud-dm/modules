@@ -19,6 +19,12 @@ resource "azurerm_key_vault" "workspace_keyvault" {
   }
 
   depends_on = [azurerm_resource_group.support_rg]
+
+  lifecycle {
+    ignore_changes = [
+      tags
+    ]
+  }
 }
 
 resource "azurerm_key_vault_access_policy" "workspace_kv_access" {
