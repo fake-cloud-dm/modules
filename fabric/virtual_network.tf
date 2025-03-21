@@ -28,5 +28,5 @@ resource "fabric_gateway" "fabric_vnet_gateway" {
   }
   capacity_id = data.fabric_capacity.capacity.id
 
-  depends_on = [azurerm_virtual_network_gateway.vnet_gateway, azurerm_subnet.gateway_subnet]
+  depends_on = [azurerm_virtual_network.fabric_vnet, azurerm_subnet.gateway_subnet]
 }
