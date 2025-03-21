@@ -14,6 +14,7 @@ resource "azurerm_key_vault" "workspace_keyvault" {
     secret_permissions = [
       "Get",
       "List",
+      "Update",
     ]
   }
 
@@ -29,19 +30,19 @@ resource "azurerm_key_vault_access_policy" "workspace_kv_access" {
   secret_permissions = [
     "Get",
     "List",
-    "Set",
+    "Update",
   ]
 
   certificate_permissions = [
     "Get",
     "List",
-    "Set",
+    "Update",
   ]
 
   key_permissions = [
     "Get",
     "List",
-    "Set",
+    "Update",
   ]
 
   depends_on = [azurerm_key_vault.workspace_keyvault, fabric_workspace.workspaces]
