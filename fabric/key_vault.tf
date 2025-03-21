@@ -14,7 +14,7 @@ resource "azurerm_key_vault" "workspace_keyvault" {
     secret_permissions = [
       "Get",
       "List",
-      "Update",
+      "Set",
     ]
   }
 
