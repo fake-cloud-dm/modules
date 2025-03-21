@@ -46,11 +46,16 @@ resource "azurerm_virtual_network_peering" "fabric_to_hub_uksouth" {
   name                         = "peer-${azurerm_virtual_network.fabric_vnet.name}-to-${var.hub_vnet_name}"
   resource_group_name          = var.existing_rg ? data.azurerm_resource_group.rg[0].name : azurerm_resource_group.rg[0].name
   virtual_network_name         = azurerm_virtual_network.fabric_vnet.name
-  remote_virtual_network_id    = var.hub_vnet_name.id
+  remote_virtual_network_id    = data.azurerm_virtual_network.hub_vnet.id
   allow_virtual_network_access = true
   allow_forwarded_traffic      = true
   allow_gateway_transit        = true
   use_remote_gateways          = false
+}
+
+data "azurerm_virtual_network" "hub_vnet" {
+  name                = var.hub_vnet_name
+  resource_group_name = var.hub_vnet_rg
 }
 
 # Fabric Virtual Network Gateway
