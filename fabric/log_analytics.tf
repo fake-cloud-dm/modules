@@ -12,7 +12,7 @@ resource "azurerm_log_analytics_workspace" "workspace_loganalytics" {
 resource "azurerm_monitor_diagnostic_setting" "workspace_diagnostic_setting" {
   for_each                   = fabric_workspace.workspaces
   name                       = "fabric_diagnostic_setting_${each.key}"
-  target_resource_id         = fabric_workspace.workspaces[each.key].id
+  target_resource_id         = "/subscriptions/${data.azurerm_subscription.current.id}/resourceGroups/${azurerm_resource_group.support_rg[each.key].name}/providers/Microsoft.PowerBIDedicated/capacities/${data.fabric_capacity.capacity.name}/workspaces/${fabric_workspace.workspaces[each.key].name}"
   log_analytics_workspace_id = azurerm_log_analytics_workspace.workspace_loganalytics[each.key].id
 
   enabled_log {

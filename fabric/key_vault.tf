@@ -14,33 +14,35 @@ resource "azurerm_key_vault" "workspace_keyvault" {
     secret_permissions = [
       "Get",
       "List",
-      "Set",
-      "Delete",
-    ]
-    key_permissions = [
-      "Get",
-      "Create",
-      "Delete",
-      "List",
-      "Recover",
-      "Release",
-      "Purge",
-      "Sign",
-      "Verify",
-      "WrapKey",
-      "UnwrapKey",
-    ]
-    storage_permissions = [
-      "Get",
-      "List",
-      "Delete",
-      "Set",
-      "Recover",
-      "Backup",
-      "Restore",
-      "Purge",
     ]
   }
 
   depends_on = [azurerm_resource_group.support_rg]
+}
+
+resource "azurerm_key_vault_access_policy" "workspace_kv_access" {
+  for_each     = fabric_workspace.workspaces
+  key_vault_id = azurerm_key_vault.workspace_keyvault[each.key].id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = fabric_workspace.workspaces[each.key].identity[0].principal_id # Get the System Assigned Managed Identity principal ID.
+
+  secret_permissions = [
+    "Get",
+    "List",
+    "Set",
+  ]
+
+  certificate_permissions = [
+    "Get",
+    "List",
+    "Set",
+  ]
+
+  key_permissions = [
+    "Get",
+    "List",
+    "Set",
+  ]
+
+  depends_on = [azurerm_key_vault.workspace_keyvault, fabric_workspace.workspaces]
 }
