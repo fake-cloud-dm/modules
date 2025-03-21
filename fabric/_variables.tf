@@ -73,7 +73,7 @@ variable "log_analytics_sku" {
 
 }
 
-variable "log_analytics_retention_days" {
+variable "log_analytics_retention" {
   description = "Log Analytics retention days"
   default     = 30
 }
