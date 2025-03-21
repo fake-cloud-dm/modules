@@ -22,7 +22,7 @@ resource "azurerm_key_vault" "workspace_keyvault" {
 
   lifecycle {
     ignore_changes = [
-      tags
+      tags, access_policy
     ]
   }
 }
