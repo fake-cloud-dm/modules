@@ -4,6 +4,12 @@ resource "azurerm_virtual_network" "fabric_vnet" {
   resource_group_name = var.existing_rg ? data.azurerm_resource_group.rg[0].name : azurerm_resource_group.rg[0].name
   location            = var.location
   address_space       = var.vnet_address_space
+
+  lifecycle {
+    ignore_changes = [
+      tags
+    ]
+  }
 }
 
 # Subnet for Gateway
