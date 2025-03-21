@@ -33,9 +33,9 @@ resource "azurerm_subnet" "gateway_subnet" {
 #Peering to Hub Network
 resource "azurerm_virtual_network_peering" "hub_to_fabric_uksouth" {
   name                         = "peer-${local.vnets_uksouth.hub.name}-to-${azurerm_virtual_network.fabric_vnet.name}"
-  resource_group_name          = local.vnets_uksouth.hub.resource_group_name
-  virtual_network_name         = local.vnets_uksouth.hub.name
-  remote_virtual_network_id    = each.value.id
+  resource_group_name          = var.hub_vnet_rg
+  virtual_network_name         = var.hub_vnet_name
+  remote_virtual_network_id    = azurerm_virtual_network.fabric_vnet.id
   allow_virtual_network_access = true
   allow_forwarded_traffic      = true
   allow_gateway_transit        = true
@@ -45,8 +45,8 @@ resource "azurerm_virtual_network_peering" "hub_to_fabric_uksouth" {
 resource "azurerm_virtual_network_peering" "fabric_to_hub_uksouth" {
   name                         = "peer-${azurerm_virtual_network.fabric_vnet.name}-to-${each.value.name}"
   resource_group_name          = var.existing_rg ? data.azurerm_resource_group.rg[0].name : azurerm_resource_group.rg[0].name
-  virtual_network_name         = local.vnets_uksouth.hub.name
-  remote_virtual_network_id    = each.value.id
+  virtual_network_name         = azurerm_virtual_network.fabric_vnet.name
+  remote_virtual_network_id    = var.hub_vnet_name.id
   allow_virtual_network_access = true
   allow_forwarded_traffic      = true
   allow_gateway_transit        = true
