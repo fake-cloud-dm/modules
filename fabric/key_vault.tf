@@ -1,3 +1,5 @@
+data "azurerm_client_config" "current" {}
+
 resource "azurerm_key_vault" "workspace_keyvault" {
   for_each            = fabric_workspace.workspaces
   name                = "kvfabws${var.customer_short_name}${each.key}"
