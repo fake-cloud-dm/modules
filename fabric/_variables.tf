@@ -77,3 +77,13 @@ variable "log_analytics_retention" {
   description = "Log Analytics retention days"
   default     = 30
 }
+
+variable "gw_subnet_prefixes" {
+  type        = list(string)
+  description = "Gateway subnet prefixes"
+}
+
+variable "vnet_address_space" {
+  type        = list(string)
+  description = "Address space for the virtual network"
+}
