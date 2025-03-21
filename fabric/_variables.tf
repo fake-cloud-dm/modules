@@ -21,6 +21,12 @@ variable "location" {
   default     = "UK South"
 }
 
+variable "location_short" {
+  type        = string
+  description = "Short name of the Azure region"
+  default     = "uks"
+}
+
 variable "fabric_capacity_name" {
   type        = string
   description = "Name of the Fabric capacity"
@@ -55,4 +61,19 @@ variable "azuredevops_pat" {
   sensitive   = true
 }
 
-# Add more variables as needed (e.g., for VNet configuration, Private Link)
+variable "customer_short_name" {
+  type        = string
+  description = "Short name of the customer"
+}
+
+variable "log_analytics_sku" {
+  type        = string
+  description = "Log Analytics SKU"
+  default     = "PerGB2018"
+
+}
+
+variable "log_analytics_retention_days" {
+  description = "Log Analytics retention days"
+  default     = 30
+}
