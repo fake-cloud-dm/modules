@@ -98,7 +98,7 @@ variable "hub_subscription_id" {
   description = "Subscription ID of the hub network"
 }
 
-variable "hub_rg_name" {
+variable "hub_vnet_rg" {
   type        = string
   description = "Name of the hub resource group"
 }
