@@ -9,8 +9,8 @@ resource "azurerm_virtual_network" "fabric_vnet" {
 # Subnet for Gateway
 resource "azurerm_subnet" "gateway_subnet" {
   name                 = "snet-fabric-gw-prod-uks-001"
-  resource_group_name  = azurerm_resource_group.vnet_rg.name
-  virtual_network_name = azurerm_virtual_network.vnet.name
+  resource_group_name  = var.existing_rg ? data.azurerm_resource_group.rg[0].name : azurerm_resource_group.rg[0].name
+  virtual_network_name = azurerm_virtual_network.fabric_vnet.name
   address_prefixes     = var.gw_subnet_prefixes
 }
 
