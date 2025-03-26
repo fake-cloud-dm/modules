@@ -16,32 +16,32 @@ resource "fabric_workspace_role_assignment" "ans_admin_role_assignments" {
 resource "azuread_group" "admin_groups" {
   for_each = { for k, v in fabric_workspace.workspaces : k => v.display_name }
 
-  display_name     = "sg_fabric_workspace_${each.value}_admin"
-  mail_nickname    = "sg_fabric_workspace_${each.value}_admin"
+  display_name     = "sg_fabric_workspace_${each.key}_admin"
+  mail_nickname    = "sg_fabric_workspace_${each.key}_admin"
   security_enabled = true
 }
 
 resource "azuread_group" "contributor_groups" {
   for_each = { for k, v in fabric_workspace.workspaces : k => v.display_name }
 
-  display_name     = "sg_fabric_workspace_${each.value}_contributor"
-  mail_nickname    = "sg_fabric_workspace_${each.value}_contributor"
+  display_name     = "sg_fabric_workspace_${each.key}_contributor"
+  mail_nickname    = "sg_fabric_workspace_${each.key}_contributor"
   security_enabled = true
 }
 
 resource "azuread_group" "member_groups" {
   for_each = { for k, v in fabric_workspace.workspaces : k => v.display_name }
 
-  display_name     = "sg_fabric_workspace_${each.value}_member"
-  mail_nickname    = "sg_fabric_workspace_${each.value}_member"
+  display_name     = "sg_fabric_workspace_${each.key}_member"
+  mail_nickname    = "sg_fabric_workspace_${each.key}_member"
   security_enabled = true
 }
 
 resource "azuread_group" "viewer_groups" {
   for_each = { for k, v in fabric_workspace.workspaces : k => v.display_name }
 
-  display_name     = "sg_fabric_workspace_${each.value}_viewer"
-  mail_nickname    = "sg_fabric_workspace_${each.value}_viewer"
+  display_name     = "sg_fabric_workspace_${each.key}_viewer"
+  mail_nickname    = "sg_fabric_workspace_${each.key}_viewer"
   security_enabled = true
 }
 
