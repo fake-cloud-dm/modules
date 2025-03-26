@@ -23,6 +23,7 @@ provider "azurerm" {
 provider "azurerm" {
   alias           = "hub_subscription"
   subscription_id = var.hub_subscription_id
+  features {}
 }
 
 //Resource Groups
