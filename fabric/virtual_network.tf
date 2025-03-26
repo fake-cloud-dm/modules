@@ -1,6 +1,6 @@
 # Virtual Network
 resource "azurerm_resource_group" "vnet_rg" {
-  name     = "rg-vnet-fabric-prod-${var.location_short}-001"
+  name     = "rg-vnet-fabric-prod-${var.location}-001"
   location = var.location
 
   lifecycle {
@@ -11,7 +11,7 @@ resource "azurerm_resource_group" "vnet_rg" {
 }
 
 resource "azurerm_virtual_network" "fabric_vnet" {
-  name                = "vnet-fabric-prod-${var.location_short}-001"
+  name                = "vnet-fabric-prod-${var.location}-001"
   resource_group_name = azurerm_resource_group.vnet_rg.name
   location            = var.location
   address_space       = var.vnet_address_space
@@ -23,12 +23,12 @@ resource "azurerm_virtual_network" "fabric_vnet" {
   }
 }
 
-# Subnet for Gateway
-resource "azurerm_subnet" "gateway_subnet" {
-  name                 = "snet-fabric-gw-prod-uks-001"
+# Subnet for Gateways
+resource "azurerm_subnet" "vnet_gateway_subnet" {
+  name                 = "snet-fabric-vngw-prod-uksouth-001"
   resource_group_name  = azurerm_resource_group.vnet_rg.name
   virtual_network_name = azurerm_virtual_network.fabric_vnet.name
-  address_prefixes     = var.gw_subnet_prefixes
+  address_prefixes     = var.vngw_subnet_prefixes
 
   delegation {
     name = "Microsoft.PowerPlatform/vnetaccesslinks"
@@ -39,6 +39,13 @@ resource "azurerm_subnet" "gateway_subnet" {
       ]
     }
   }
+}
+
+resource "azurerm_subnet" "onprem_gateway_subnet" {
+  name                 = "snet-fabric-opgw-prod-uksouth-001"
+  resource_group_name  = azurerm_resource_group.vnet_rg.name
+  virtual_network_name = azurerm_virtual_network.fabric_vnet.name
+  address_prefixes     = var.vngw_subnet_prefixes
 }
 
 #Peering to Hub Network
@@ -101,7 +108,7 @@ resource "azurerm_subnet_route_table_association" "rt_association_connectivity" 
 # # Fabric Virtual Network Gateway
 # resource "fabric_gateway" "fabric_vnet_gateway" {
 #   type                            = "VirtualNetwork"
-#   display_name                    = "fabric-vnet-gw-prod-${var.location_short}-001"
+#   display_name                    = "fabric-vnet-gw-prod-${var.location}-001"
 #   inactivity_minutes_before_sleep = 30 # Adjust as needed
 #   number_of_member_gateways       = 1
 #   virtual_network_azure_resource = {

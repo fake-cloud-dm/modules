@@ -1,5 +1,5 @@
 resource "azurerm_resource_group" "purview_rg" {
-  name     = "rg-purview-prod-${var.location_short}-001"
+  name     = "rg-purview-prod-${var.location}-001"
   location = var.location
 
   lifecycle {

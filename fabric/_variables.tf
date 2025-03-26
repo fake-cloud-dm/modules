@@ -83,7 +83,12 @@ variable "log_analytics_retention" {
   default     = 30
 }
 
-variable "gw_subnet_prefixes" {
+variable "vngw_subnet_prefixes" {
+  type        = list(string)
+  description = "Gateway subnet prefixes"
+}
+
+variable "opgw_subnet_prefixes" {
   type        = list(string)
   description = "Gateway subnet prefixes"
 }
