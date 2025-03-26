@@ -100,7 +100,7 @@ resource "azurerm_route" "rt_vnet_gateway_route" {
 }
 
 resource "azurerm_subnet_route_table_association" "rt_association_vnet_gateway" {
-  subnet_id      = azurerm_subnet.gateway_subnet.id
+  subnet_id      = azurerm_subnet.vnet_gateway_subnet.id
   route_table_id = azurerm_route_table.route_table_vnet_gateway.id
 }
 
@@ -127,7 +127,7 @@ resource "azurerm_route" "rt_fabric_route" {
 }
 
 resource "azurerm_subnet_route_table_association" "rt_association_onprem_gateway" {
-  subnet_id      = azurerm_subnet.gateway_subnet.id
+  subnet_id      = azurerm_subnet.onprem_gateway_subnet.id
   route_table_id = azurerm_route_table.route_table_onprem_gateway.id
 }
 
