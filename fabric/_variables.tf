@@ -93,6 +93,11 @@ variable "opgw_subnet_prefixes" {
   description = "Gateway subnet prefixes"
 }
 
+variable "hub_subscription_id" {
+  type        = string
+  description = "Subscription ID of the hub network"
+}
+
 variable "vnet_address_space" {
   type        = list(string)
   description = "Address space for the virtual network"

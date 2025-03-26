@@ -74,6 +74,7 @@ resource "azurerm_virtual_network_peering" "fabric_to_hub_uksouth" {
 data "azurerm_virtual_network" "hub_vnet" {
   name                = var.hub_vnet_name
   resource_group_name = var.hub_vnet_rg
+  subscription_id     = var.hub_subscription_id
 }
 
 #Route Tables to Hub Firewall
