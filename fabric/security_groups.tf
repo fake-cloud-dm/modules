@@ -8,7 +8,7 @@ resource "fabric_workspace_role_assignment" "ans_admin_role_assignments" {
   for_each = { for k, v in fabric_workspace.workspaces : k => v }
 
   workspace_id   = each.value.id
-  principal_id   = azuread_group.ans_engineer_fabric_admin.id
+  principal_id   = azuread_group.ans_engineer_fabric_admin.object_id
   principal_type = "Group"
   role           = "Admin"
 }
