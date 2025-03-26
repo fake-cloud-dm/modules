@@ -57,12 +57,12 @@ resource "azurerm_resource_group" "support_rg" {
   }
 }
 
-resource "azurerm_provider_registration" "power_platform" {
-  provider_namespace = "Microsoft.PowerPlatform"
+resource "azurerm_resource_provider_registration" "power_platform" {
+  name = "Microsoft.PowerPlatform"
 }
 
-resource "azurerm_provider_registration" "fabric" {
-  provider_namespace = "Microsoft.Fabric"
+resource "azurerm_resource_provider_registration" "fabric" {
+  name = "Microsoft.Fabric"
 }
 
 resource "azurerm_fabric_capacity" "fabric_capacity" {
