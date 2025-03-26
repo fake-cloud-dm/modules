@@ -86,7 +86,7 @@ resource "azurerm_fabric_capacity" "fabric_capacity" {
       tags
     ]
   }
-  depends_on = [azurerm_provider_registration.fabric]
+  depends_on = [azurerm_resource_provider_registration.fabric]
 }
 
 data "fabric_capacity" "capacity" {
