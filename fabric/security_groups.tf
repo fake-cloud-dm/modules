@@ -4,7 +4,7 @@ resource "azuread_group" "ans_engineer_fabric_admin" {
   security_enabled = true
 }
 
-resource "fabric_workspace_role_assignment" "admin_role_assignments" {
+resource "fabric_workspace_role_assignment" "ans_admin_role_assignments" {
   for_each = { for k, v in fabric_workspace.workspaces : k => v }
 
   workspace_id   = each.value.id
