@@ -1,6 +1,6 @@
 resource "azurerm_log_analytics_workspace" "workspace_loganalytics" {
   for_each            = fabric_workspace.workspaces
-  name                = "log-fabric-${each.key}-${var.location_short}-001"
+  name                = "log-fabric-${each.key}-${var.location}-001"
   location            = var.location
   resource_group_name = azurerm_resource_group.support_rg[each.key].name
   sku                 = var.log_analytics_sku
