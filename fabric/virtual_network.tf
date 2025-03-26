@@ -99,7 +99,7 @@ resource "azurerm_route" "rt_vnet_gateway_route" {
   next_hop_in_ip_address = var.hub_fw_ip
 }
 
-resource "azurerm_subnet_route_table_association" "rt_association_connectivity" {
+resource "azurerm_subnet_route_table_association" "rt_association_vnet_gateway" {
   subnet_id      = azurerm_subnet.gateway_subnet.id
   route_table_id = azurerm_route_table.route_table_vnet_gateway.id
 }
@@ -126,7 +126,7 @@ resource "azurerm_route" "rt_fabric_route" {
   next_hop_in_ip_address = var.hub_fw_ip
 }
 
-resource "azurerm_subnet_route_table_association" "rt_association_connectivity" {
+resource "azurerm_subnet_route_table_association" "rt_association_onprem_gateway" {
   subnet_id      = azurerm_subnet.gateway_subnet.id
   route_table_id = azurerm_route_table.route_table_onprem_gateway.id
 }
