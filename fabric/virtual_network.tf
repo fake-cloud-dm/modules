@@ -45,7 +45,7 @@ resource "azurerm_subnet" "onprem_gateway_subnet" {
   name                 = "snet-fabric-opgw-prod-uksouth-001"
   resource_group_name  = azurerm_resource_group.vnet_rg.name
   virtual_network_name = azurerm_virtual_network.fabric_vnet.name
-  address_prefixes     = var.vngw_subnet_prefixes
+  address_prefixes     = var.opgw_subnet_prefixes
 }
 
 #Peering to Hub Network
