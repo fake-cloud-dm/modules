@@ -36,7 +36,7 @@ data "azurerm_resource_group" "rg" {
 
 resource "azurerm_resource_group" "support_rg" {
   for_each = { for k, v in fabric_workspace.workspaces : k => v }
-  name     = "rg-fabric-support-${each.key}-${var.location_short}-001"
+  name     = "rg-fabric-support-${each.key}-${var.location}-001"
   location = var.location
 
   lifecycle {

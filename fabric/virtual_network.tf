@@ -76,11 +76,38 @@ data "azurerm_virtual_network" "hub_vnet" {
   resource_group_name = var.hub_vnet_rg
 }
 
-#Route Table to Hub Firewall
-resource "azurerm_route_table" "route_table_fabric" {
-  name                = lower("rt-${azurerm_subnet.gateway_subnet.name}")
+#Route Tables to Hub Firewall
+resource "azurerm_route_table" "route_table_vnet_gateway" {
+  name                = lower("rt-${azurerm_subnet.vnet_gateway_subnet.name}")
   location            = var.location
-  resource_group_name = var.existing_rg ? data.azurerm_resource_group.rg[0].name : azurerm_resource_group.rg[0].name
+  resource_group_name = azurerm_resource_group.vnet_rg.name
+
+  lifecycle {
+    ignore_changes = [
+      tags
+    ]
+  }
+}
+
+resource "azurerm_route" "rt_vnet_gateway_route" {
+  name                = "Default"
+  resource_group_name = azurerm_resource_group.vnet_rg.name
+  route_table_name    = azurerm_route_table.route_table_vnet_gateway.name
+
+  address_prefix         = "0.0.0.0/0"
+  next_hop_type          = "VirtualAppliance"
+  next_hop_in_ip_address = var.hub_fw_ip
+}
+
+resource "azurerm_subnet_route_table_association" "rt_association_connectivity" {
+  subnet_id      = azurerm_subnet.gateway_subnet.id
+  route_table_id = azurerm_route_table.route_table_vnet_gateway.id
+}
+
+resource "azurerm_route_table" "route_table_onprem_gateway" {
+  name                = lower("rt-${azurerm_subnet.onprem_gateway_subnet.name}")
+  location            = var.location
+  resource_group_name = azurerm_resource_group.vnet_rg.name
 
   lifecycle {
     ignore_changes = [
@@ -91,8 +118,8 @@ resource "azurerm_route_table" "route_table_fabric" {
 
 resource "azurerm_route" "rt_fabric_route" {
   name                = "Default"
-  resource_group_name = var.existing_rg ? data.azurerm_resource_group.rg[0].name : azurerm_resource_group.rg[0].name
-  route_table_name    = azurerm_route_table.route_table_fabric.name
+  resource_group_name = azurerm_resource_group.vnet_rg.name
+  route_table_name    = azurerm_route_table.route_table_onprem_gateway.name
 
   address_prefix         = "0.0.0.0/0"
   next_hop_type          = "VirtualAppliance"
@@ -101,7 +128,7 @@ resource "azurerm_route" "rt_fabric_route" {
 
 resource "azurerm_subnet_route_table_association" "rt_association_connectivity" {
   subnet_id      = azurerm_subnet.gateway_subnet.id
-  route_table_id = azurerm_route_table.route_table_fabric.id
+  route_table_id = azurerm_route_table.route_table_onprem_gateway.id
 }
 
 
@@ -112,12 +139,12 @@ resource "azurerm_subnet_route_table_association" "rt_association_connectivity" 
 #   inactivity_minutes_before_sleep = 30 # Adjust as needed
 #   number_of_member_gateways       = 1
 #   virtual_network_azure_resource = {
-#     resource_group_name  = var.existing_rg ? data.azurerm_resource_group.rg[0].name : azurerm_resource_group.rg[0].name
+#     resource_group_name  = azurerm_resource_group.vnet_rg.name
 #     virtual_network_name = azurerm_virtual_network.fabric_vnet.name
-#     subnet_name          = azurerm_subnet.gateway_subnet.name
+#     subnet_name          = azurerm_subnet.vnet_gateway_subnet.name
 #     subscription_id      = var.subscription_id
 #   }
 #   capacity_id = data.fabric_capacity.capacity.id
 
-#   depends_on = [azurerm_virtual_network.fabric_vnet, azurerm_subnet.gateway_subnet]
+#   depends_on = [azurerm_virtual_network.fabric_vnet, azurerm_subnet.vnet_gateway_subnet]
 # }
