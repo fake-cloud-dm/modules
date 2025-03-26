@@ -57,6 +57,14 @@ resource "azurerm_resource_group" "support_rg" {
   }
 }
 
+resource "azurerm_provider_registration" "power_platform" {
+  provider_namespace = "Microsoft.PowerPlatform"
+}
+
+resource "azurerm_provider_registration" "fabric" {
+  provider_namespace = "Microsoft.Fabric"
+}
+
 resource "azurerm_fabric_capacity" "fabric_capacity" {
   name                = var.fabric_capacity_name
   resource_group_name = var.existing_rg ? data.azurerm_resource_group.rg[0].name : azurerm_resource_group.rg[0].name
@@ -78,6 +86,7 @@ resource "azurerm_fabric_capacity" "fabric_capacity" {
       tags
     ]
   }
+  depends_on = [azurerm_provider_registration.fabric]
 }
 
 data "fabric_capacity" "capacity" {
