@@ -15,6 +15,16 @@ provider "fabric" {
   preview = true
 }
 
+provider "azurerm" {
+  features {}
+  subscription_id = var.subscription_id
+}
+
+provider "azurerm" {
+  alias           = "hub_subscription"
+  subscription_id = var.hub_subscription_id
+}
+
 //Resource Groups
 resource "azurerm_resource_group" "rg" {
   count = var.existing_rg ? 0 : 1
