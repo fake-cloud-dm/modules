@@ -58,6 +58,8 @@ resource "azurerm_virtual_network_peering" "hub_to_fabric_uksouth" {
   allow_forwarded_traffic      = true
   allow_gateway_transit        = true
   use_remote_gateways          = false
+
+  provider = azurerm.hub_subscription
 }
 
 resource "azurerm_virtual_network_peering" "fabric_to_hub_uksouth" {
