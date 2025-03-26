@@ -1,7 +1,18 @@
 # Virtual Network
+resource "azurerm_resource_group" "vnet_rg" {
+  name     = "rg-vnet-fabric-prod-${var.location_short}-001"
+  location = var.location
+
+  lifecycle {
+    ignore_changes = [
+      tags
+    ]
+  }
+}
+
 resource "azurerm_virtual_network" "fabric_vnet" {
   name                = "vnet-fabric-prod-${var.location_short}-001"
-  resource_group_name = var.existing_rg ? data.azurerm_resource_group.rg[0].name : azurerm_resource_group.rg[0].name
+  resource_group_name = azurerm_resource_group.vnet_rg.name
   location            = var.location
   address_space       = var.vnet_address_space
 
@@ -15,7 +26,7 @@ resource "azurerm_virtual_network" "fabric_vnet" {
 # Subnet for Gateway
 resource "azurerm_subnet" "gateway_subnet" {
   name                 = "snet-fabric-gw-prod-uks-001"
-  resource_group_name  = var.existing_rg ? data.azurerm_resource_group.rg[0].name : azurerm_resource_group.rg[0].name
+  resource_group_name  = azurerm_resource_group.vnet_rg.name
   virtual_network_name = azurerm_virtual_network.fabric_vnet.name
   address_prefixes     = var.gw_subnet_prefixes
 
@@ -44,7 +55,7 @@ resource "azurerm_virtual_network_peering" "hub_to_fabric_uksouth" {
 
 resource "azurerm_virtual_network_peering" "fabric_to_hub_uksouth" {
   name                         = "peer-${azurerm_virtual_network.fabric_vnet.name}-to-${var.hub_vnet_name}"
-  resource_group_name          = var.existing_rg ? data.azurerm_resource_group.rg[0].name : azurerm_resource_group.rg[0].name
+  resource_group_name          = azurerm_resource_group.vnet_rg.name
   virtual_network_name         = azurerm_virtual_network.fabric_vnet.name
   remote_virtual_network_id    = data.azurerm_virtual_network.hub_vnet.id
   allow_virtual_network_access = true
