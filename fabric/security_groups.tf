@@ -49,7 +49,7 @@ resource "fabric_workspace_role_assignment" "admin_role_assignments" {
   for_each = { for k, v in fabric_workspace.workspaces : k => v }
 
   workspace_id   = each.value.id
-  principal_id   = azuread_group.admin_groups[each.key].id
+  principal_id   = azuread_group.admin_groups[each.key].object_id
   principal_type = "Group"
   role           = "Admin"
 }
@@ -58,7 +58,7 @@ resource "fabric_workspace_role_assignment" "contributor_role_assignments" {
   for_each = { for k, v in fabric_workspace.workspaces : k => v }
 
   workspace_id   = each.value.id
-  principal_id   = azuread_group.contributor_groups[each.key].id
+  principal_id   = azuread_group.contributor_groups[each.key].object_id
   principal_type = "Group"
   role           = "Contributor"
 }
@@ -67,7 +67,7 @@ resource "fabric_workspace_role_assignment" "member_role_assignments" {
   for_each = { for k, v in fabric_workspace.workspaces : k => v }
 
   workspace_id   = each.value.id
-  principal_id   = azuread_group.member_groups[each.key].id
+  principal_id   = azuread_group.member_groups[each.key].object_id
   principal_type = "Group"
   role           = "Member"
 }
@@ -76,7 +76,7 @@ resource "fabric_workspace_role_assignment" "viewer_role_assignments" {
   for_each = { for k, v in fabric_workspace.workspaces : k => v }
 
   workspace_id   = each.value.id
-  principal_id   = azuread_group.viewer_groups[each.key].id
+  principal_id   = azuread_group.viewer_groups[each.key].object_id
   principal_type = "Group"
   role           = "Viewer"
 }
