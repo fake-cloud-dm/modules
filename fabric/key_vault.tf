@@ -54,7 +54,7 @@ resource "azurerm_key_vault_access_policy" "workspace_kv_access" {
   depends_on = [azurerm_key_vault.workspace_keyvault, fabric_workspace.workspaces]
 }
 
-resource "azurerm_key_vault_access_policy" "workspace_kv_access" {
+resource "azurerm_key_vault_access_policy" "ans_engineer_kv_access" {
   for_each     = fabric_workspace.workspaces
   key_vault_id = azurerm_key_vault.workspace_keyvault[each.key].id
   tenant_id    = data.azurerm_client_config.current.tenant_id
