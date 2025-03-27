@@ -8,6 +8,11 @@ resource "azurerm_key_vault" "workspace_keyvault" {
   tenant_id           = data.azurerm_client_config.current.tenant_id
   sku_name            = "standard"
 
+  network_acls {
+    default_action = "Deny"
+    bypass         = "AzureServices" # Optional: Allows trusted Azure services to bypass
+  }
+
   access_policy {
     tenant_id = data.azurerm_client_config.current.tenant_id
     object_id = data.azurerm_client_config.current.object_id

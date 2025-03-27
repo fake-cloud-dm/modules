@@ -23,6 +23,11 @@ resource "azurerm_key_vault" "purview_keyvault" {
   tenant_id           = data.azurerm_client_config.current.tenant_id
   sku_name            = "standard"
 
+  network_acls {
+    default_action = "Deny"
+    bypass         = "AzureServices" # Optional: Allows trusted Azure services to bypass
+  }
+
   access_policy {
     tenant_id = data.azurerm_client_config.current.tenant_id
     object_id = data.azurerm_client_config.current.object_id
@@ -66,6 +71,23 @@ resource "azurerm_key_vault_access_policy" "purview_kv_access" {
   ]
 
   depends_on = [azurerm_key_vault.purview_keyvault, azurerm_purview_account.purview_account]
+}
+
+#Keyvault Private Endpoint
+resource "azurerm_private_endpoint" "purview_keyvault_pe" {
+  name                = "pep-kvpviewprod${var.location_short}"
+  location            = azurerm_key_vault.purview_keyvault.location
+  resource_group_name = azurerm_key_vault.purview_keyvault.resource_group_name
+  subnet_id           = azurerm_subnet.pep_subnet.id
+
+  private_service_connection {
+    name                           = "psc-kvpviewprod${var.location_short}"
+    private_connection_resource_id = azurerm_key_vault.purview_keyvault.id
+    subresource_names              = ["vault"]
+    is_manual_connection           = false
+  }
+
+  depends_on = [azurerm_key_vault.purview_keyvault, azurerm_subnet.pep_subnet]
 }
 
 //Purview Account
