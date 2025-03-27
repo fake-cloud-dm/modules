@@ -51,31 +51,31 @@ resource "azurerm_key_vault" "purview_keyvault" {
   }
 }
 
-resource "azurerm_key_vault_access_policy" "purview_kv_access" {
-  key_vault_id = azurerm_key_vault.purview_keyvault.id
-  tenant_id    = data.azurerm_client_config.current.tenant_id
-  object_id    = azurerm_purview_account.purview_account.identity[0].principal_id
+# resource "azurerm_key_vault_access_policy" "purview_kv_access" {
+#   key_vault_id = azurerm_key_vault.purview_keyvault.id
+#   tenant_id    = data.azurerm_client_config.current.tenant_id
+#   object_id    = azurerm_purview_account.purview_account.identity[0].principal_id
 
-  secret_permissions = [
-    "Get",
-    "List",
-    "Set",
-  ]
+#   secret_permissions = [
+#     "Get",
+#     "List",
+#     "Set",
+#   ]
 
-  certificate_permissions = [
-    "Get",
-    "List",
-    "Update",
-  ]
+#   certificate_permissions = [
+#     "Get",
+#     "List",
+#     "Update",
+#   ]
 
-  key_permissions = [
-    "Get",
-    "List",
-    "Update",
-  ]
+#   key_permissions = [
+#     "Get",
+#     "List",
+#     "Update",
+#   ]
 
-  depends_on = [azurerm_key_vault.purview_keyvault, azurerm_purview_account.purview_account]
-}
+#   depends_on = [azurerm_key_vault.purview_keyvault, azurerm_purview_account.purview_account]
+# }
 
 #Keyvault Private Endpoint
 resource "azurerm_private_endpoint" "purview_keyvault_pe" {
