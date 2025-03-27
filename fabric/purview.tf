@@ -1,3 +1,7 @@
+resource "azurerm_resource_provider_registration" "purview" {
+  name = "Microsoft.Purview"
+}
+
 resource "azurerm_resource_group" "purview_rg" {
   name     = "rg-purview-prod-${var.location}-001"
   location = var.location
@@ -99,4 +103,6 @@ resource "azurerm_purview_account" "purview_account" {
   identity {
     type = "SystemAssigned"
   }
+
+  depends_on = [azurerm_resource_provider_registration.purview]
 }
