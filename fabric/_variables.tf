@@ -93,6 +93,11 @@ variable "opgw_subnet_prefixes" {
   description = "Gateway subnet prefixes"
 }
 
+variable "pep_subnet_prefixes" {
+  type        = list(string)
+  description = "Gateway subnet prefixes"
+}
+
 variable "vnet_address_space" {
   type        = list(string)
   description = "Address space for the virtual network"

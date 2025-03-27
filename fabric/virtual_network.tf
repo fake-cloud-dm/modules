@@ -23,7 +23,7 @@ resource "azurerm_virtual_network" "fabric_vnet" {
   }
 }
 
-# Subnet for Gateways
+# Virtual Network Gateway Subnet
 resource "azurerm_subnet" "vnet_gateway_subnet" {
   name                 = "snet-fabric-vngw-prod-uksouth-001"
   resource_group_name  = azurerm_resource_group.vnet_rg.name
@@ -41,11 +41,101 @@ resource "azurerm_subnet" "vnet_gateway_subnet" {
   }
 }
 
+resource "azurerm_route_table" "route_table_vnet_gateway" {
+  name                = lower("rt-${azurerm_subnet.vnet_gateway_subnet.name}")
+  location            = var.location
+  resource_group_name = azurerm_resource_group.vnet_rg.name
+
+  lifecycle {
+    ignore_changes = [
+      tags
+    ]
+  }
+}
+
+resource "azurerm_route" "rt_vnet_gateway_route" {
+  name                = "Default"
+  resource_group_name = azurerm_resource_group.vnet_rg.name
+  route_table_name    = azurerm_route_table.route_table_vnet_gateway.name
+
+  address_prefix         = "0.0.0.0/0"
+  next_hop_type          = "VirtualAppliance"
+  next_hop_in_ip_address = var.hub_fw_ip
+}
+
+resource "azurerm_subnet_route_table_association" "rt_association_vnet_gateway" {
+  subnet_id      = azurerm_subnet.vnet_gateway_subnet.id
+  route_table_id = azurerm_route_table.route_table_vnet_gateway.id
+}
+
+# On-Premise Gateway Subnet
 resource "azurerm_subnet" "onprem_gateway_subnet" {
   name                 = "snet-fabric-opgw-prod-uksouth-001"
   resource_group_name  = azurerm_resource_group.vnet_rg.name
   virtual_network_name = azurerm_virtual_network.fabric_vnet.name
   address_prefixes     = var.opgw_subnet_prefixes
+}
+
+resource "azurerm_route_table" "route_table_onprem_gateway" {
+  name                = lower("rt-${azurerm_subnet.onprem_gateway_subnet.name}")
+  location            = var.location
+  resource_group_name = azurerm_resource_group.vnet_rg.name
+
+  lifecycle {
+    ignore_changes = [
+      tags
+    ]
+  }
+}
+
+resource "azurerm_route" "rt_onprem_gateway_route" {
+  name                = "Default"
+  resource_group_name = azurerm_resource_group.vnet_rg.name
+  route_table_name    = azurerm_route_table.route_table_onprem_gateway.name
+
+  address_prefix         = "0.0.0.0/0"
+  next_hop_type          = "VirtualAppliance"
+  next_hop_in_ip_address = var.hub_fw_ip
+}
+
+resource "azurerm_subnet_route_table_association" "rt_association_onprem_gateway" {
+  subnet_id      = azurerm_subnet.onprem_gateway_subnet.id
+  route_table_id = azurerm_route_table.route_table_onprem_gateway.id
+}
+
+# Private Endpoints Subnet
+resource "azurerm_subnet" "pep_subnet" {
+  name                 = "snet-fabric-pep-prod-uksouth-001"
+  resource_group_name  = azurerm_resource_group.vnet_rg.name
+  virtual_network_name = azurerm_virtual_network.fabric_vnet.name
+  address_prefixes     = var.pep_subnet_prefixes
+}
+
+resource "azurerm_route_table" "route_table_pep" {
+  name                = lower("rt-${azurerm_subnet.pep_subnet.name}")
+  location            = var.location
+  resource_group_name = azurerm_resource_group.vnet_rg.name
+
+  lifecycle {
+    ignore_changes = [
+      tags
+    ]
+  }
+}
+
+resource "azurerm_route" "rt_pep_route" {
+  name                = "Default"
+  resource_group_name = azurerm_resource_group.vnet_rg.name
+  route_table_name    = azurerm_route_table.route_table_pep.name
+
+  address_prefix         = "0.0.0.0/0"
+  next_hop_type          = "VirtualAppliance"
+  next_hop_in_ip_address = var.hub_fw_ip
+}
+
+resource "azurerm_subnet_route_table_association" "rt_association_pep" {
+  subnet_id      = azurerm_subnet.pep_subnet.id
+  route_table_id = azurerm_route_table.route_table_pep.id
 }
 
 #Peering to Hub Network
@@ -78,62 +168,6 @@ data "azurerm_virtual_network" "hub_vnet" {
   resource_group_name = var.hub_vnet_rg
   provider            = azurerm.hub_subscription
 }
-
-#Route Tables to Hub Firewall
-resource "azurerm_route_table" "route_table_vnet_gateway" {
-  name                = lower("rt-${azurerm_subnet.vnet_gateway_subnet.name}")
-  location            = var.location
-  resource_group_name = azurerm_resource_group.vnet_rg.name
-
-  lifecycle {
-    ignore_changes = [
-      tags
-    ]
-  }
-}
-
-resource "azurerm_route" "rt_vnet_gateway_route" {
-  name                = "Default"
-  resource_group_name = azurerm_resource_group.vnet_rg.name
-  route_table_name    = azurerm_route_table.route_table_vnet_gateway.name
-
-  address_prefix         = "0.0.0.0/0"
-  next_hop_type          = "VirtualAppliance"
-  next_hop_in_ip_address = var.hub_fw_ip
-}
-
-resource "azurerm_subnet_route_table_association" "rt_association_vnet_gateway" {
-  subnet_id      = azurerm_subnet.vnet_gateway_subnet.id
-  route_table_id = azurerm_route_table.route_table_vnet_gateway.id
-}
-
-resource "azurerm_route_table" "route_table_onprem_gateway" {
-  name                = lower("rt-${azurerm_subnet.onprem_gateway_subnet.name}")
-  location            = var.location
-  resource_group_name = azurerm_resource_group.vnet_rg.name
-
-  lifecycle {
-    ignore_changes = [
-      tags
-    ]
-  }
-}
-
-resource "azurerm_route" "rt_fabric_route" {
-  name                = "Default"
-  resource_group_name = azurerm_resource_group.vnet_rg.name
-  route_table_name    = azurerm_route_table.route_table_onprem_gateway.name
-
-  address_prefix         = "0.0.0.0/0"
-  next_hop_type          = "VirtualAppliance"
-  next_hop_in_ip_address = var.hub_fw_ip
-}
-
-resource "azurerm_subnet_route_table_association" "rt_association_onprem_gateway" {
-  subnet_id      = azurerm_subnet.onprem_gateway_subnet.id
-  route_table_id = azurerm_route_table.route_table_onprem_gateway.id
-}
-
 
 # # Fabric Virtual Network Gateway
 # resource "fabric_gateway" "fabric_vnet_gateway" {

@@ -80,3 +80,21 @@ resource "azurerm_key_vault_access_policy" "ans_engineer_kv_access" {
 
   depends_on = [azuread_group.ans_engineer_fabric_admin]
 }
+
+#Keyvault Private Endpoints
+resource "azurerm_private_endpoint" "workspace_keyvault_pe" {
+  for_each            = azurerm_key_vault.workspace_keyvault
+  name                = "pep-kvfabws-${var.customer_short_name}-${each.key}"
+  location            = azurerm_key_vault.workspace_keyvault[each.key].location
+  resource_group_name = azurerm_key_vault.workspace_keyvault[each.key].resource_group_name
+  subnet_id           = azurerm_subnet.pep_subnet.id
+
+  private_service_connection {
+    name                           = "psc-kvfabws-${var.customer_short_name}-${each.key}"
+    private_connection_resource_id = azurerm_key_vault.workspace_keyvault[each.key].id
+    subresource_names              = ["vault"]
+    is_manual_connection           = false
+  }
+
+  depends_on = [azurerm_key_vault.workspace_keyvault, azurerm_subnet.pep_subnet]
+}
