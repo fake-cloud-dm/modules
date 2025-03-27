@@ -104,7 +104,7 @@ resource "azurerm_purview_account" "purview_account" {
     type = "SystemAssigned"
   }
 
-  managed_resource_group_name = "rg_pview_managed_${var.location}_001"
+  managed_resource_group_name = "rg-pview-managed-${var.location}-001"
 
   depends_on = [azurerm_resource_provider_registration.purview]
 }
