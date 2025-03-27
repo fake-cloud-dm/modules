@@ -95,16 +95,16 @@ resource "azurerm_private_endpoint" "purview_keyvault_pe" {
 }
 
 //Purview Account
-resource "azurerm_purview_account" "purview_account" {
-  name                = "pview-prod-${var.location}-001"
-  resource_group_name = azurerm_resource_group.purview_rg.name
-  location            = azurerm_resource_group.purview_rg.location
+# resource "azurerm_purview_account" "purview_account" {
+#   name                = "pview-prod-${var.location}-001"
+#   resource_group_name = azurerm_resource_group.purview_rg.name
+#   location            = azurerm_resource_group.purview_rg.location
 
-  identity {
-    type = "SystemAssigned"
-  }
+#   identity {
+#     type = "SystemAssigned"
+#   }
 
-  managed_resource_group_name = "rg-pview-managed-${var.location}-001"
+#   managed_resource_group_name = "rg-pview-managed-${var.location}-001"
 
-  depends_on = [azurerm_resource_provider_registration.purview]
-}
+#   depends_on = [azurerm_resource_provider_registration.purview]
+# }
