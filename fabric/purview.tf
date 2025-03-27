@@ -71,8 +71,8 @@ resource "azurerm_key_vault_access_policy" "purview_kv_access" {
 //Purview Account
 resource "azurerm_purview_account" "purview_account" {
   name                = "pview-prod-${var.location}-001"
-  resource_group_name = azurerm_resource_group.example.name
-  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.purview_rg.name
+  location            = azurerm_resource_group.purview_rg.location
 
   identity {
     type = "SystemAssigned"
