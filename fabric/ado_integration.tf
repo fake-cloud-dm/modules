@@ -9,8 +9,8 @@ resource "azuredevops_project" "projects" {
     if k == "dev"
   }
 
-  name               = "Fabric-${substr(each.key, 1, length(each.key) - 1)}"
-  description        = "Fabric project for ${substr(each.key, 1, length(each.key) - 1)}"
+  name               = "Fabric-${upper(substr(each.key, 0, 1))}${substr(each.key, 1, length(each.key) - 1)}"
+  description        = "Fabric project for ${upper(substr(each.key, 0, 1))}${substr(each.key, 1, length(each.key) - 1)}"
   version_control    = "Git"
   work_item_template = "Agile"
 }
@@ -40,7 +40,7 @@ resource "fabric_workspace_git" "git_integration" {
   git_provider_details = {
     git_provider_type = "AzureDevOps"
     organization_name = var.azuredevops_org
-    project_name      = "Fabric-${substr(each.key, 1, length(each.key) - 1)}"
+    project_name      = "Fabric-${upper(substr(each.key, 0, 1))}${substr(each.key, 1, length(each.key) - 1)}"
     repository_name   = "fabric-workspace-dev"
     branch_name       = "main"
     directory_name    = "/"
